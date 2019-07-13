@@ -162,15 +162,15 @@ for layer in model2.layers:
 a = Flatten()(model1.output)
 b = Flatten()(model2.output)
 
-combined = subtract([a,b])
-#combined = concatenate([a,b])
+#combined = subtract([a,b])
+combined = concatenate([a,b])
 
 # Defining Output operations
 final = Dense(512,activation='relu')(combined)
 final = Dense(256,activation='relu')(final)
 final = Dense(128,activation='relu')(final)
 final = Dense(64,activation='relu')(final)
-final = Dense(2, activation="softmax")(final)
+final = Dense(2, activation="sigmoid")(final)
     
 model = Model(inputs=[model1.input,model2.input], outputs=final)
  
@@ -199,7 +199,7 @@ checkpoint = ModelCheckpoint(best_model,
                              monitor="acc",
                              verbose=1, 
                              save_best_only=True, 
-                             mode='max')
+                             mode='m ax')
 
 callbacks_list = [checkpoint]
 
@@ -209,10 +209,10 @@ history = model.fit_generator(train_gen,
                     verbose=1,
                     shuffle=True,
                     max_queue_size=500,
-                    initial_epoch=5,
+                    #initial_epoch=5,
                     #pickle_safe=True,
-                    use_multiprocessing=False,    
-                    workers=1,         
+                    use_multiprocessing=False,
+                    workers=1,
                     callbacks=callbacks_list
                    )
 
